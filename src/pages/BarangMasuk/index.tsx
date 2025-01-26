@@ -228,7 +228,6 @@ const BarangMasukPage = () => {
   };
 
   const handlePostBarangMasuk = async (data: any) => {
-    console.log("🚀 ~ handlePostBarang ~ data:", data);
     try {
       setIsLoading(true);
       const formData = new FormData();
@@ -429,20 +428,20 @@ const BarangMasukPage = () => {
               item.total_harga = item.jumlah * item.harga;
               return item;
             }),
-            (
-              <TableContainer
-                isPagination={true}
-                columns={columns || []}
-                data={data || []}
-                customPageSize={5}
-                divclassName="-mx-5 overflow-x-auto"
-                tableclassName="w-full whitespace-nowrap"
-                theadclassName="ltr:text-left rtl:text-right bg-slate-100 dark:bg-zink-600"
-                thclassName="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-b border-slate-200 dark:border-zink-500"
-                tdclassName="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500"
-                PaginationClassName="flex flex-col items-center gap-4 px-4 mt-4 md:flex-row"
-              />
-            ))
+              (
+                <TableContainer
+                  isPagination={true}
+                  columns={columns || []}
+                  data={data || []}
+                  customPageSize={5}
+                  divclassName="-mx-5 overflow-x-auto"
+                  tableclassName="w-full whitespace-nowrap"
+                  theadclassName="ltr:text-left rtl:text-right bg-slate-100 dark:bg-zink-600"
+                  thclassName="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-b border-slate-200 dark:border-zink-500"
+                  tdclassName="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500"
+                  PaginationClassName="flex flex-col items-center gap-4 px-4 mt-4 md:flex-row"
+                />
+              ))
           ) : loadingV ? (
             loadingView
           ) : (
@@ -557,7 +556,7 @@ const BarangMasukPage = () => {
                   ))}
                 </select>
                 {validation.touched.id_pemasok &&
-                validation.errors.id_pemasok ? (
+                  validation.errors.id_pemasok ? (
                   <p className="text-red-400">{validation.errors.id_pemasok}</p>
                 ) : null}
               </div>
@@ -578,7 +577,7 @@ const BarangMasukPage = () => {
                   value={validation.values.jumlah_masuk || ""}
                 />
                 {validation.touched.jumlah_masuk &&
-                validation.errors.jumlah_masuk ? (
+                  validation.errors.jumlah_masuk ? (
                   <p className="text-red-400">
                     {validation.errors.jumlah_masuk}
                   </p>
@@ -601,7 +600,7 @@ const BarangMasukPage = () => {
                   value={validation.values.harga_satuan || ""}
                 />
                 {validation.touched.harga_satuan &&
-                validation.errors.harga_satuan ? (
+                  validation.errors.harga_satuan ? (
                   <p className="text-red-400">
                     {validation.errors.harga_satuan}
                   </p>
@@ -647,8 +646,8 @@ const BarangMasukPage = () => {
                 {isLoading
                   ? "Loading"
                   : !!isEdit
-                  ? "Update"
-                  : "Add Barang Masuk"}
+                    ? "Update"
+                    : "Add Barang Masuk"}
               </button>
             </div>
           </form>

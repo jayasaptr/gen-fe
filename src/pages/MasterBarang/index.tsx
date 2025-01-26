@@ -243,79 +243,88 @@ const MasterBarang = () => {
   };
 
   const handlePostMasterBarang = async (data: any) => {
-    try {
-      setIsLoading(true);
-      const formData = new FormData();
-      formData.append("kode", data.kode);
-      formData.append("nama", data.nama);
-      formData.append("kategori", data.kategori);
-      formData.append("satuan", data.satuan);
-      formData.append("stock_awal", data.stock_awal);
-      formData.append("harga_beli", data.harga_beli);
-      formData.append("harga_jual", data.harga_jual);
+    if (data.harga_beli > data.harga_jual) {
+      Error("Harga Jual tidak boleh lebih rendah dari harga beli");
+    } else {
+      try {
+        setIsLoading(true);
+        const formData = new FormData();
+        formData.append("kode", data.kode);
+        formData.append("nama", data.nama);
+        formData.append("kategori", data.kategori);
+        formData.append("satuan", data.satuan);
+        formData.append("stock_awal", data.stock_awal);
+        formData.append("harga_beli", data.harga_beli);
+        formData.append("harga_jual", data.harga_jual);
 
-      const userResponse = await axiosInstance.post("/barang", formData, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (userResponse.data.success === true) {
-        Success("Data Master Barang Berhasil Ditambahkan");
-        fetchDataBarang();
-        toggle();
-      }
-    } catch (error: any) {
-      Error("Data Master Barang Gagal Ditambahkan");
-      if (error.response.status === 401) {
-        localStorage.removeItem("authUser");
-        naviagate("/login");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleUpdateSuratMasuk = async (data: any) => {
-    console.log("🚀 ~ MasterBarang ~ values:", data);
-    try {
-      setIsLoading(true);
-      const formData = new FormData();
-      formData.append("kode", data.kode);
-      formData.append("nama", data.nama);
-      formData.append("kategori", data.kategori);
-      formData.append("satuan", data.satuan);
-      formData.append("stock_awal", data.stock_awal);
-      formData.append("harga_beli", data.harga_beli);
-      formData.append("harga_jual", data.harga_jual);
-      formData.append("_method", "PUT");
-
-      const userResponse = await axiosInstance.post(
-        `/barang/${data.id}`,
-        formData,
-        {
+        const userResponse = await axiosInstance.post("/barang", formData, {
           headers: {
             Authorization: `Bearer ${user.token}`,
             "Content-Type": "multipart/form-data",
           },
-        }
-      );
+        });
 
-      if (userResponse.data.success === true) {
-        Success("Data Master Barang Berhasil Diupdate");
-        fetchDataBarang();
-        toggle();
+        if (userResponse.data.success === true) {
+          Success("Data Master Barang Berhasil Ditambahkan");
+          fetchDataBarang();
+          toggle();
+        }
+      } catch (error: any) {
+        Error("Data Master Barang Gagal Ditambahkan");
+        if (error.response.status === 401) {
+          localStorage.removeItem("authUser");
+          naviagate("/login");
+        }
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error: any) {
-      Error("Data Barang Masuk Gagal Diupdate");
-      if (error.response.status === 401) {
-        localStorage.removeItem("authUser");
-        naviagate("/login");
-      }
-    } finally {
-      setIsLoading(false);
     }
+
+  };
+
+  const handleUpdateSuratMasuk = async (data: any) => {
+    if (data.harga_beli > data.harga_jual) {
+      Error("Harga Jual tidak boleh lebih rendah dari harga beli");
+    } else {
+      try {
+        setIsLoading(true);
+        const formData = new FormData();
+        formData.append("kode", data.kode);
+        formData.append("nama", data.nama);
+        formData.append("kategori", data.kategori);
+        formData.append("satuan", data.satuan);
+        formData.append("stock_awal", data.stock_awal);
+        formData.append("harga_beli", data.harga_beli);
+        formData.append("harga_jual", data.harga_jual);
+        formData.append("_method", "PUT");
+
+        const userResponse = await axiosInstance.post(
+          `/barang/${data.id}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (userResponse.data.success === true) {
+          Success("Data Master Barang Berhasil Diupdate");
+          fetchDataBarang();
+          toggle();
+        }
+      } catch (error: any) {
+        Error("Data Barang Masuk Gagal Diupdate");
+        if (error.response.status === 401) {
+          localStorage.removeItem("authUser");
+          naviagate("/login");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
   };
 
   const handleDeleteSuratMasuk = async (id: any) => {
@@ -420,20 +429,20 @@ const MasterBarang = () => {
               item.total_harga = item.jumlah * item.harga;
               return item;
             }),
-            (
-              <TableContainer
-                isPagination={true}
-                columns={columns || []}
-                data={data || []}
-                customPageSize={5}
-                divclassName="-mx-5 overflow-x-auto"
-                tableclassName="w-full table-fixed"
-                theadclassName="ltr:text-left rtl:text-right bg-slate-100 dark:bg-zink-600"
-                thclassName="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-b border-slate-200 dark:border-zink-500"
-                tdclassName="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500 overflow-hidden text-ellipsis whitespace-nowrap"
-                PaginationClassName="flex flex-col items-center gap-4 px-4 mt-4 md:flex-row"
-              />
-            ))
+              (
+                <TableContainer
+                  isPagination={true}
+                  columns={columns || []}
+                  data={data || []}
+                  customPageSize={5}
+                  divclassName="-mx-5 overflow-x-auto"
+                  tableclassName="w-full table-fixed"
+                  theadclassName="ltr:text-left rtl:text-right bg-slate-100 dark:bg-zink-600"
+                  thclassName="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-b border-slate-200 dark:border-zink-500"
+                  tdclassName="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500 overflow-hidden text-ellipsis whitespace-nowrap"
+                  PaginationClassName="flex flex-col items-center gap-4 px-4 mt-4 md:flex-row"
+                />
+              ))
           ) : loadingV ? (
             loadingView
           ) : (
@@ -562,7 +571,7 @@ const MasterBarang = () => {
                   value={validation.values.stock_awal || ""}
                 />
                 {validation.touched.stock_awal &&
-                validation.errors.stock_awal ? (
+                  validation.errors.stock_awal ? (
                   <p className="text-red-400">{validation.errors.stock_awal}</p>
                 ) : null}
               </div>
@@ -603,7 +612,7 @@ const MasterBarang = () => {
                   value={validation.values.harga_beli || ""}
                 />
                 {validation.touched.harga_beli &&
-                validation.errors.harga_beli ? (
+                  validation.errors.harga_beli ? (
                   <p className="text-red-400">{validation.errors.harga_beli}</p>
                 ) : null}
               </div>
@@ -624,7 +633,7 @@ const MasterBarang = () => {
                   value={validation.values.harga_jual || ""}
                 />
                 {validation.touched.harga_jual &&
-                validation.errors.harga_jual ? (
+                  validation.errors.harga_jual ? (
                   <p className="text-red-400">{validation.errors.harga_jual}</p>
                 ) : null}
               </div>
@@ -648,8 +657,8 @@ const MasterBarang = () => {
                 {isLoading
                   ? "Loading"
                   : !!isEdit
-                  ? "Update"
-                  : "Add Master Barang"}
+                    ? "Update"
+                    : "Add Master Barang"}
               </button>
             </div>
           </form>
