@@ -260,7 +260,9 @@ const BarangKeluarPage = () => {
         toggle();
       }
     } catch (error: any) {
-      Error("Data Barang Keluar Gagal Ditambahkan");
+      if (error.response) {
+        Error(error.response.data.message);// Menampilkan header respons
+      }
       if (error.response.status === 401) {
         localStorage.removeItem("authUser");
         naviagate("/login");
